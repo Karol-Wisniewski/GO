@@ -3,36 +3,29 @@ package main
 import (
 	"fmt"
 	big "math/big"
+	"strconv"
 	"strings"
 )
 
-func calculateFactorial(n int) *big.Int {
-	factorial := big.NewInt(1)
-	for i := 2; i <= n; i++ {
-		factorial.Mul(factorial, big.NewInt(int64(i)))
-	}
-	return factorial
-}
-
-func containsAllBytes(s string, byteArray []byte) bool {
-	for _, b := range byteArray {
-		if !strings.Contains(s, string(b)) {
+func containsAllBytes(s string, intArray []int) bool {
+	for _, i := range intArray {
+		if !strings.Contains(s, strconv.Itoa(i)) {
 			return false
 		}
 	}
 	return true
 }
 
-func checkIfFactorialContainsAllBytes(byteArray []byte, n int) int {
+func checkIfFactorialContainsAllBytes(intArray []int, n int) int {
 	for {
-		factorial := calculateFactorial(n)
+		factorial := new(big.Int).MulRange(1, int64(n))
 		factorialString := factorial.String()
 
-		if containsAllBytes(factorialString, byteArray) {
+		if containsAllBytes(factorialString, intArray) {
 			return n
+		} else {
+			n++
 		}
-
-		n++
 	}
 }
 
@@ -40,7 +33,7 @@ func main() {
 	var name string
 	var surname string
 	var slicedName string
-	var byteArray []byte
+	var intArray []int
 
 	fmt.Println("Enter your name: ")
 	fmt.Scan(&name)
@@ -49,11 +42,9 @@ func main() {
 	fmt.Scan(&surname)
 
 	slicedName = strings.ToLower(name[0:3] + surname[0:3])
-	byteArray = []byte(slicedName)
+	intArray = []int{int(slicedName[0]), int(slicedName[1]), int(slicedName[2]), int(slicedName[3]), int(slicedName[4]), int(slicedName[5])}
 
-	fmt.Println(byteArray)
+	n := checkIfFactorialContainsAllBytes(intArray, 1)
 
-	n := checkIfFactorialContainsAllBytes(byteArray, 1)
-
-	fmt.Println(n)
+	fmt.Println("Twoja silna liczba: " + strconv.Itoa(n))
 }
