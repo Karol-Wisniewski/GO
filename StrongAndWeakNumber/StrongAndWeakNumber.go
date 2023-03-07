@@ -29,6 +29,31 @@ func checkIfFactorialContainsAllBytes(intArray []int, n int) int {
 	}
 }
 
+func fibFrequency(n int) int {
+
+	cache[n]++
+
+	switch n {
+	case 0, 1:
+		return n
+	default:
+		return fibFrequency(n-1) + fibFrequency(n-2)
+	}
+}
+
+func fibFrequencyClosestToStrongNumber(cache map[int]int, strongNumber int) {
+	for key, element := range cache {
+		diff := strongNumber - element
+		if diff < 0 {
+			diff = (-diff + strongNumber)
+		}
+		if diff < minDiff {
+			minDiff = diff
+			closestElement = key
+		}
+	}
+}
+
 func main() {
 	var name string
 	var surname string
@@ -46,5 +71,20 @@ func main() {
 
 	n := checkIfFactorialContainsAllBytes(intArray, 1)
 
-	fmt.Println("Twoja silna liczba: " + strconv.Itoa(n))
+	fmt.Println("Your 'strong' number: " + strconv.Itoa(n))
+
+	fibFrequency(30)
+
+	fibFrequencyClosestToStrongNumber(cache, n)
+
+	fmt.Println(cache)
+
+	fmt.Println(closestElement)
+
 }
+
+var cache = make(map[int]int)
+
+var minDiff int
+
+var closestElement int
