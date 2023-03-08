@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"math"
 	big "math/big"
 	"strconv"
 	"strings"
@@ -41,17 +42,19 @@ func fibFrequency(n int) int {
 	}
 }
 
-func fibFrequencyClosestToStrongNumber(cache map[int]int, strongNumber int) {
-	for key, element := range cache {
-		diff := strongNumber - element
-		if diff < 0 {
-			diff = (-diff + strongNumber)
-		}
-		if diff < minDiff {
-			minDiff = diff
-			closestElement = key
+func fibFrequencyClosestToStrongNumber(cache map[int]int, strongNumber int) int {
+	minDiff := float64(strongNumber - cache[len(cache)-1])
+	small := len(cache) - 1
+
+	for key, value := range cache {
+		diff := strongNumber - value
+		if math.Abs(float64(diff)) < minDiff {
+			minDiff = math.Abs(float64(diff))
+			small = key
 		}
 	}
+
+	return small
 }
 
 func main() {
@@ -75,16 +78,12 @@ func main() {
 
 	fibFrequency(30)
 
-	fibFrequencyClosestToStrongNumber(cache, n)
+	// fmt.Println(cache)
 
-	fmt.Println(cache)
-
-	fmt.Println(closestElement)
+	fmt.Println("Your 'weak' number: " + strconv.Itoa(fibFrequencyClosestToStrongNumber(cache, n)))
 
 }
 
 var cache = make(map[int]int)
 
 var minDiff int
-
-var closestElement int
