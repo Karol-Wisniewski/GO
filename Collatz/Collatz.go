@@ -84,3 +84,5 @@ func main() {
 	fmt.Println("Longest:", longest, "Number:", number)
 	fmt.Println("-----------------------------------------------")
 }
+
+//Liczba o najdłuższym ciągu z zakresów 1000-2000, 2000-3000, itd. jest zawsze nieparzysta
