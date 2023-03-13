@@ -2,9 +2,8 @@ package main
 
 import (
 	"fmt"
-	"gnuplot"
 	"log"
-	"math"
+	"os"
 )
 
 func even(n int) (b bool) {
@@ -84,28 +83,21 @@ func generateCollatzSequences(n int) map[int]int {
 
 func main() {
 	// getLongestColltazSequence(1000, 2000)
-	// sequencesUnder1k := generateCollatzSequences(100000)
-	// Create a new gnuplot session
-	plot, err := gnuplot.NewPlotter("", true, false)
+	sequencesUnder1k := generateCollatzSequences(100000)
+
+	file, err := os.Create("Collatz.dat")
+
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer plot.Close()
 
-	// Set the output file to PNG format
-	plot.CheckedCmd("set terminal png")
-
-	// Set the output filename
-	plot.CheckedCmd("set output 'plot.png'")
-
-	// Plot the sine function
-	x := make([]float64, 0)
-	y := make([]float64, 0)
-	for i := 0; i < 100; i++ {
-		x = append(x, float64(i)/10.0)
-		y = append(y, math.Sin(float64(i)/10.0))
+	for i := 1; i < len(sequencesUnder1k)+1; i++ {
+		file.WriteString(fmt.Sprintf("%d %d", i, sequencesUnder1k[i]))
+		file.WriteString("\n")
 	}
-	plot.PlotXY(x, y, "Sine wave")
+
+	file.Close()
+
 }
 
-//Liczba o najdłuższym ciągu z zakresów 1000-2000, 2000-3000, itd. jest zawsze nieparzysta
+//Number with the longest Collatz sequence in the range 1000-2000, 2000-3000, etc. is always odd
